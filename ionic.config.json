@@ -1,0 +1,8 @@
+{
+  "name": "fpb-panel",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react",
+  "id": "e91feab8"
+}

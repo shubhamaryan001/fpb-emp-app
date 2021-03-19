@@ -1,0 +1,210 @@
+/* :host(.split-pane-visible) ::slotted(ion-menu.split-pane-side.menu-enabled) {
+  flex-shrink: 0;
+}
+:host(.menu-button-hidden) {
+  display: block;
+} */
+
+:root {
+  --primary: #50b6cf;
+  --secondary: #f5a947;
+  --light-backgroud: #efefef;
+  --muted-texted: #a5a5a5;
+  --medium-dark-text: #4b4b4b;
+  --success-color: #2dd36f;
+  --danger-color: #eb445a;
+}
+* {
+  font-family: "Poppins", sans-serif !important;
+}
+html {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.login-form ion-input {
+}
+
+@media only screen and (min-width: 900px) {
+  .login-page ion-card {
+    width: 70%;
+    margin: 8px auto !important;
+  }
+
+  ion-card {
+    width: 70%;
+    margin: 8px auto !important;
+  }
+}
+
+.default-page {
+  padding: 8px 8px;
+  min-height: 100%;
+  background: var(--light-backgroud);
+}
+
+ion-card {
+  margin: 5px;
+  padding: 5px;
+}
+ion-card-header {
+  padding: 5px;
+}
+ion-card-content {
+  padding: 10px !important;
+}
+.total-orders-box ion-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--medium-dark-text);
+}
+
+.t-order-icon {
+  font-size: 80px;
+  color: var(--secondary);
+}
+
+.total-orders-box p {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 5px;
+}
+
+.section-2 ion-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--medium-dark-text);
+}
+
+ion-grid {
+  padding: 0;
+}
+
+ion-col {
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+.t-order-icon-success {
+  font-size: 75px;
+  color: var(--success-color);
+}
+
+.section-2 p {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 5px;
+}
+
+.default-flex-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px;
+}
+
+.default-flex-box-sm {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 3px;
+}
+
+.default-flex-box-sm p:nth-child(1) {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--medium-dark-text);
+}
+.default-flex-box-sm p:nth-child(2) {
+  font-size: 11px;
+  padding-left: 5px;
+  font-weight: 500;
+  color: var(--muted-texted);
+}
+
+.default-flex-box p:nth-child(1) {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--medium-dark-text);
+}
+
+.default-flex-box p:nth-child(2) {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted-texted);
+}
+
+.orders-cards {
+  padding: 12px 20px 12px 20px;
+  position: relative;
+}
+
+.ribbon {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+  background-color: #f5a947;
+}
+
+.ribbon span {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 2.5px 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  z-index: 1;
+  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+  background-color: #f5a947;
+}
+
+.ribbon span::before {
+  content: "";
+  position: absolute;
+  left: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid #f5a947;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #f5a947;
+}
+
+.package-name {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  z-index: 1;
+  background-color: #50b6cf;
+  border-radius: 50px;
+  height: 20px;
+  width: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.package-name span {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
