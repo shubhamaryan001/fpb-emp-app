@@ -1,5 +1,6 @@
 import {
   IonBadge,
+  IonButton,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -210,6 +211,18 @@ function Index() {
                         ) : (
                           ""
                         )}
+
+                        <div>
+                          <IonButton
+                            style={{ fontWeight: "600", fontSize: "10px" }}
+                            size="small"
+                            color="secondary"
+                            routerLink={`/admin/order/${o._id}`}
+                          >
+                            {" "}
+                            Update
+                          </IonButton>
+                        </div>
                       </IonCard>
                     </IonCol>
                   </>

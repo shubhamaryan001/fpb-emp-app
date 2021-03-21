@@ -12,6 +12,8 @@ import EmpDashboard from "../pages/Emp";
 
 import AllOrders from "../pages/Admin/Orders";
 import AllCustomers from "../pages/Admin/Customers";
+import OrderById from "../pages/Admin/Orders/OrderById";
+import Coupons from "../pages/Admin/Coupons";
 
 function Index() {
   return (
@@ -34,6 +36,16 @@ function Index() {
               path="/admin/customers"
               exact={true}
               component={AllCustomers}
+            />
+            <AdminRoute
+              path="/admin/order/:orderId"
+              exact={true}
+              component={OrderById}
+            />
+            <AdminRoute
+              path="/admin/coupons"
+              exact={true}
+              component={Coupons}
             />
             <Route
               path="/emp/dashboard"

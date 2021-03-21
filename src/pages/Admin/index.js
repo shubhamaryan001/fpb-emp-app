@@ -20,15 +20,21 @@ import React from "react";
 import Header from "../../components/Header";
 import { AiFillDropboxCircle } from "react-icons/ai";
 import { useEffect, useState, useGlobal } from "reactn";
-import { listAllOrders, logoutHandler, getAllCustomers } from "./ApisAdmin";
+import {
+  listAllOrders,
+  logoutHandler,
+  getAllCustomers,
+  listCoupons,
+} from "./ApisAdmin";
 import { dangerToast, successToast } from "../../components/Toast";
-import { peopleCircleOutline, peopleOutline } from "ionicons/icons";
+import { cardSharp, peopleCircleOutline, peopleOutline } from "ionicons/icons";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 function Index() {
   const [userInfo, setUserInfo] = useGlobal("userInfo");
   const [totalOrders, setTotalOrders] = useState("");
   const [totalCustomers, setTotalCustomers] = useState("");
+  const [totalCoupons, setTotalCoupons] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -82,6 +88,19 @@ function Index() {
         dangerToast("Please try Again.");
         setLoading(false);
       });
+
+    listCoupons(userId, token).then((data) => {
+      if (data.error) {
+        dangerToast(data.error);
+        console.log(data.error);
+        setLoading(false);
+      } else {
+        successToast("Coupons Loaded Success");
+        console.log(data);
+        setTotalCoupons(data.coupons.length);
+        setLoading(false);
+      }
+    });
   };
 
   function doRefresh(event) {
@@ -146,19 +165,21 @@ function Index() {
                 </IonCol>
 
                 <IonCol size={6}>
-                  <IonCard className="ion-text-center">
-                    <IonCardHeader>
-                      <IonCardTitle>CUSTOMERS</IonCardTitle>
-                    </IonCardHeader>
+                  <Link to="/admin/coupons">
+                    <IonCard className="ion-text-center">
+                      <IonCardHeader>
+                        <IonCardTitle>COUPONS</IonCardTitle>
+                      </IonCardHeader>
 
-                    <div>
-                      <IonIcon
-                        icon={peopleCircleOutline}
-                        className="t-order-icon-success"
-                      />
-                      <p className="">{totalCustomers}</p>
-                    </div>
-                  </IonCard>
+                      <div>
+                        <IonIcon
+                          icon={cardSharp}
+                          className="t-order-icon-success"
+                        />
+                        <p className="">{totalCoupons}</p>
+                      </div>
+                    </IonCard>
+                  </Link>
                 </IonCol>
               </IonRow>
             </IonGrid>
