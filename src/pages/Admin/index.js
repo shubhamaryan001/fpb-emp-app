@@ -30,6 +30,8 @@ import { dangerToast, successToast } from "../../components/Toast";
 import { cardSharp, peopleCircleOutline, peopleOutline } from "ionicons/icons";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
 function Index() {
   const [userInfo, setUserInfo] = useGlobal("userInfo");
   const [totalOrders, setTotalOrders] = useState("");
@@ -37,6 +39,7 @@ function Index() {
   const [totalCoupons, setTotalCoupons] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
 
   const initFunctions = () => {
     const userId = userInfo.user._id;

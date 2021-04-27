@@ -1,10 +1,14 @@
+/* eslint-disable jsx-a11y/anchor-has-content */
 import {
+  IonButton,
   IonCard,
   IonCardContent,
   IonCol,
   IonContent,
   IonGrid,
+  IonIcon,
   IonLoading,
+  IonModal,
   IonPage,
   IonRefresher,
   IonRefresherContent,
@@ -14,12 +18,25 @@ import {
 import React from "react";
 import Header from "../../../components/Header";
 import { useState, useEffect, useGlobal } from "reactn";
-import { getAllCustomers, logoutHandler } from "../ApisAdmin";
+import { getAllCustomers, listAllOrders, logoutHandler } from "../ApisAdmin";
 import { dangerToast, successToast } from "../../../components/Toast";
+import _ from "lodash";
+import {
+  arrowDownCircleOutline,
+  arrowDownOutline,
+  arrowUpOutline,
+  star,
+} from "ionicons/icons";
+
+import moment from "moment";
 
 function Index() {
   const [userInfo, setUserInfo] = useGlobal("userInfo");
   const [userList, setUserList] = useState([]);
+  const [orderList, setOrderList] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState([]);
+
   const [loading, setLoading] = useState(false);
   const initUsersList = () => {
     const userId = userInfo.user._id;
@@ -51,8 +68,41 @@ function Index() {
       });
   };
 
+  const initAllOrders = () => {
+    const userId = userInfo.user._id;
+    const token = userInfo.token;
+    setLoading(true);
+    listAllOrders(userId, token)
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+          if (data.error === "Please login again.") {
+            logoutHandler();
+          }
+          dangerToast(data.error);
+          setLoading(false);
+        } else {
+          let allOrderCustomer = [];
+          data.orders.map((o, i) => {
+            let customer = o.orderedBy._id;
+            allOrderCustomer.push(customer);
+            return customer;
+          });
+          setOrderList(allOrderCustomer);
+          successToast("Orders loaded.");
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        dangerToast("Please try Again.");
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
     initUsersList();
+    initAllOrders();
   }, []);
 
   function doRefresh(event) {
@@ -60,6 +110,68 @@ function Index() {
     initUsersList();
     event.detail.complete();
   }
+
+  const checkAllinOne = (userId) => {
+    const result = _.indexOf(orderList, userId);
+    if (result > -1) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const openModalWithData = (u) => (event) => {
+    console.log(u.userPageTrack);
+    setModalData(u.userPageTrack);
+    setShowModal(true);
+  };
+
+  const modalContent = (u) => {
+    return (
+      <IonModal
+        isOpen={showModal}
+        cssClass="tracking-page-modal"
+        onDidDismiss={() => setShowModal(false)}
+      >
+        <div className="track-pages-box">
+          {modalData.length > 0 ? (
+            <>
+              {modalData &&
+                modalData.map((p, i) => (
+                  <>
+                    <div className="ion-text-center" key={i}>
+                      {i === 0 ? (
+                        ""
+                      ) : (
+                        <IonIcon icon={arrowUpOutline} color="success" />
+                      )}
+                      <IonCard>
+                        <p style={{ margin: "0" }}>{p}</p>
+                      </IonCard>
+                    </div>
+                  </>
+                ))}
+            </>
+          ) : (
+            <>
+              <div className="ion-text-center">
+                <IonCard>
+                  <p>No activity Happen yet</p>
+                </IonCard>
+              </div>
+            </>
+          )}
+        </div>
+        <IonButton
+          color="tertiary"
+          size="small"
+          onClick={() => setShowModal(false)}
+        >
+          Close Modal
+        </IonButton>
+      </IonModal>
+    );
+  };
   return (
     <IonPage>
       <Header title="CUSTOMERS" backButton={true} />
@@ -106,6 +218,19 @@ function Index() {
                           />
                         )}
                       </div>
+                      {checkAllinOne(u._id) ? (
+                        <>
+                          <div className="ion-text-center">
+                            <IonIcon
+                              icon={star}
+                              style={{ fontSize: "25px" }}
+                              color="warning"
+                            />
+                          </div>
+                        </>
+                      ) : (
+                        ""
+                      )}
                       <div
                         style={{ justifyContent: "center" }}
                         className="default-flex-box-sm"
@@ -116,15 +241,37 @@ function Index() {
                         <p>Name:</p>
                         <p>{u.fullName}</p>{" "}
                       </div>
-
                       <div className="default-flex-box-sm">
                         <p>Mobile No:</p>
-                        <p>{u.mobileNumber}</p>{" "}
+                        <p>
+                          <a href={`tel:+91${u.mobileNumber}`}>
+                            {u.mobileNumber}
+                          </a>
+                        </p>{" "}
                       </div>
-
                       <div className="default-flex-box-sm">
                         <p>Secondary No:</p>
                         <p>{u.secondaryNumber}</p>{" "}
+                      </div>
+                      <div className="default-flex-box-sm">
+                        <p>Register At:</p>
+                        <p>
+                          {moment(u.createdAt).format(
+                            "MMMM Do YYYY, h:mm:ss a"
+                          )}
+                        </p>{" "}
+                      </div>
+
+                      <div className="default-flex-box-sm">
+                        <IonButton
+                          color="primary"
+                          size="small"
+                          onClick={openModalWithData(u)}
+                        >
+                          Track Activity
+                        </IonButton>
+
+                        {modalContent()}
                       </div>
                     </IonCardContent>
                   </IonCard>

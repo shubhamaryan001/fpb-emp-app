@@ -161,7 +161,7 @@ const Menu = () => {
         )}
 
         <div className="">
-          <IonMenuToggle>
+          <IonMenuToggle autoHide={false}>
             <IonButton size="small" color="light" onClick={logoutHandler}>
               LOGOUT
             </IonButton>

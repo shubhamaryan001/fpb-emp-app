@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 /* Basic CSS for apps built with Ionic */
@@ -19,7 +19,11 @@ import "./index.css";
 import Router from "./Router";
 
 const App = () => {
-  return <Router />;
+  return (
+    <>
+      <Router />
+    </>
+  );
 };
 
 export default App;

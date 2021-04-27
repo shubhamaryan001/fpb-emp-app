@@ -205,6 +205,24 @@ a {
   justify-content: center;
 }
 
+.hidden-handle-box {
+  position: absolute;
+  bottom: 6px;
+  right: 40px;
+  z-index: 1;
+  border-radius: 50px;
+  height: 20px;
+  width: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hidden-icon {
+  font-size: 25px;
+}
+
 .package-name span {
   color: #fff;
   font-size: 13px;
@@ -454,4 +472,14 @@ a {
   margin: 0;
   font-size: 12px;
   font-weight: 500;
+}
+
+.tracking-page-modal {
+  padding-top: 250px;
+}
+
+.track-pages-box {
+  padding: 10px;
+  height: 100%;
+  overflow-y: scroll;
 }

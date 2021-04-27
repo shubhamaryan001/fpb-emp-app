@@ -237,3 +237,20 @@ export const removeCoupon = (userId, token, couponId) => {
       console.log(err);
     });
 };
+
+export const hiddenOrderById = (userId, token, orderId) => {
+  return fetch(`${API}/order/${orderId}/hidden-order/${userId}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

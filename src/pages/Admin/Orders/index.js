@@ -8,6 +8,7 @@ import {
   IonCol,
   IonContent,
   IonGrid,
+  IonIcon,
   IonItem,
   IonLabel,
   IonLoading,
@@ -19,10 +20,11 @@ import {
   IonSelectOption,
   IonText,
 } from "@ionic/react";
+import { eyedrop, eyeOffOutline, eyeOutline } from "ionicons/icons";
 import React, { useState, useEffect, useGlobal } from "reactn";
 import Header from "../../../components/Header";
 import { dangerToast, successToast } from "../../../components/Toast";
-import { listAllOrders, logoutHandler } from "../ApisAdmin";
+import { hiddenOrderById, listAllOrders, logoutHandler } from "../ApisAdmin";
 
 function Index() {
   const [userInfo, setUserInfo] = useGlobal("userInfo");
@@ -48,7 +50,11 @@ function Index() {
         } else {
           console.log(data);
           setOrderList(data.orders);
-          setOrderFiltered(data.orders);
+          let result = data.orders.filter(
+            (o) =>
+              o.hidden === false && o.orderStatus.projectCompleted === false
+          );
+          setOrderFiltered(result);
           successToast("Orders loaded.");
           setLoading(false);
         }
@@ -69,13 +75,51 @@ function Index() {
     const value = event.target.value;
     console.log(value);
     if (value === "ALL") {
-      setOrderFiltered(orderList);
+      let result = orderList.filter((o) => o.hidden === false);
+      setOrderFiltered(result);
+    } else if (value === "Hidden") {
+      let result = orderList.filter((o) => o.hidden === true);
+      setOrderFiltered(result);
+    } else if (value === "Cancelled") {
+      let result = orderList.filter((o) => o.orderStatus.cancelled === true);
+      setOrderFiltered(result);
+    } else if (value === "Completed") {
+      let result = orderList.filter(
+        (o) => o.orderStatus.projectCompleted === true
+      );
+      setOrderFiltered(result);
     } else {
       let result = orderList.filter(
         (o) => o.purchasedPackage.packageName === value
       );
       setOrderFiltered(result);
     }
+  };
+
+  const hiddenOrder = (orderId) => (event) => {
+    const userId = userInfo.user._id;
+    const token = userInfo.token;
+    setLoading(true);
+    hiddenOrderById(userId, token, orderId)
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+          if (data.error === "Please login again.") {
+            logoutHandler();
+          }
+          dangerToast(data.error);
+          setLoading(false);
+        } else {
+          console.log(data);
+          initAllOrders();
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        dangerToast("Please try Again.");
+        setLoading(false);
+      });
   };
 
   function doRefresh(event) {
@@ -112,7 +156,7 @@ function Index() {
                   interface="action-sheet"
                   onIonChange={handleOrderFilter}
                 >
-                  <IonSelectOption value="ALL">ALL</IonSelectOption>
+                  <IonSelectOption value="ALL">ACTIVE</IonSelectOption>
                   <IonSelectOption value="LUXURY HOUSE DESIGN PACKAGE">
                     LUXURY
                   </IonSelectOption>
@@ -122,6 +166,9 @@ function Index() {
                   <IonSelectOption value="FLOOR PLAN PACKAGE">
                     FLOOR PLAN
                   </IonSelectOption>
+                  <IonSelectOption value="Hidden">Hidden</IonSelectOption>
+                  <IonSelectOption value="Cancelled">Cancelled</IonSelectOption>
+                  <IonSelectOption value="Completed">Completed</IonSelectOption>
                 </IonSelect>
               </IonItem>
             </div>
@@ -169,6 +216,17 @@ function Index() {
                             </IonBadge>
                           </div>
                         </IonCardContent>
+
+                        <div
+                          onClick={hiddenOrder(o._id)}
+                          className="hidden-handle-box"
+                        >
+                          <IonIcon
+                            className="hidden-icon"
+                            icon={o.hidden ? eyeOffOutline : eyeOutline}
+                            color={o.hidden ? "warning" : "success"}
+                          />
+                        </div>
 
                         {o.purchasedPackage.packageName.substring(0, 1) ===
                         "L" ? (
